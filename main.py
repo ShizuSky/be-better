@@ -1,5 +1,6 @@
 import customtkinter as ctk
-
+from database import Database
+from modules.habit_tracker import HabitTrackerFrame
 # Ustawienia wyglądu aplikacji
 ctk.set_appearance_mode("dark")  # Tryb: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")
@@ -8,6 +9,8 @@ ctk.set_default_color_theme("blue")
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
+
+        self.db = Database()
 
         # Konfiguracja okna
         self.title("Be-Better")
@@ -59,9 +62,19 @@ class App(ctk.CTk):
         self.content_label.pack(pady=20)
 
     def show_habits(self):
+        # 1. Czyścimy panel główny ze starej zawartości
         self.clear_frame()
-        self.content_label = ctk.CTkLabel(self.main_content, text="🔥 HABIT TRACKER", font=("Arial", 24))
-        self.content_label.pack(pady=20)
+
+        # 2. Tworzymy obiekt HabitTrackerFrame z pliku modules/habit_tracker.py
+        # Przekazujemy mu 'self.main_content' jako rodzica i 'self.db' jako dostęp do danych
+        self.habit_module = HabitTrackerFrame(
+            master=self.main_content,
+            db=self.db,
+            fg_color="transparent"
+        )
+
+        # 3. Wyświetlamy go na cały dostępny obszar
+        self.habit_module.pack(fill="both", expand=True)
 
     def clear_frame(self):
         for widget in self.main_content.winfo_children():
