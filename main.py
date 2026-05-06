@@ -1,6 +1,8 @@
 import customtkinter as ctk
 from database import Database
 from modules.habit_tracker import HabitTrackerFrame
+from modules.planning import PlanningFrame
+from modules.training import TrainingFrame
 # Ustawienia wyglądu aplikacji
 ctk.set_appearance_mode("dark")  # Tryb: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")
@@ -79,6 +81,17 @@ class App(ctk.CTk):
     def clear_frame(self):
         for widget in self.main_content.winfo_children():
             widget.destroy()
+
+    def show_planowanie(self):
+        self.clear_frame()
+        # Wywołujemy nowy moduł
+        self.planning_module = PlanningFrame(self.main_content, self.db, fg_color="transparent")
+        self.planning_module.pack(fill="both", expand=True)
+
+    def show_trening(self):
+        self.clear_frame()
+        self.training_module = TrainingFrame(self.main_content, self.db, fg_color="transparent")
+        self.training_module.pack(fill="both", expand=True)
 
 
 if __name__ == "__main__":
