@@ -81,6 +81,17 @@ class App(ctk.CTk):
         for widget in self.main_content.winfo_children():
             widget.destroy()
 
+    def show_planowanie(self):
+        self.clear_frame()
+        # Wywołujemy nowy moduł
+        self.planning_module = PlanningFrame(self.main_content, self.db, fg_color="transparent")
+        self.planning_module.pack(fill="both", expand=True)
+
+    def show_trening(self):
+        self.clear_frame()
+        self.training_module = TrainingFrame(self.main_content, self.db, fg_color="transparent")
+        self.training_module.pack(fill="both", expand=True)
+
 
 if __name__ == "__main__":
     app = App()

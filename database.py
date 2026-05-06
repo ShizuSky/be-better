@@ -9,22 +9,28 @@ class Database:
         self.create_tables()
 
     def create_tables(self):
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS habits (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                streak INTEGER DEFAULT 0,
-                last_completed TEXT
-            )
-        ''')
+        # ... (poprzedni kod habits) ...
 
+        # Zmieniona tabela tasks z kolumną task_date
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
+                task_date TEXT NOT NULL,
                 is_done INTEGER DEFAULT 0
             )
         ''')
+        self.conn.commit()
+
+    # Zmieniona funkcja dodawania - teraz przyjmuje datę
+    def add_task(self, title, task_date):
+        self.cursor.execute("INSERT INTO tasks (title, task_date) VALUES (?, ?)", (title, task_date))
+        self.conn.commit()
+
+    # Funkcja pobierania zadań tylko dla KONKRETNEGO dnia
+    def get_tasks_by_date(self, task_date):
+        self.cursor.execute("SELECT * FROM tasks WHERE task_date = ?", (task_date,))
+        return self.cursor.fetchall()
         self.conn.commit()
 
     # --- SEKCOJA NAWYKÓW ---
