@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from database import Database
 from modules.habit_tracker import HabitTrackerFrame
+from modules.planning import PlanningFrame
 # Ustawienia wyglądu aplikacji
 ctk.set_appearance_mode("dark")  # Tryb: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")

@@ -1,4 +1,3 @@
-# modules/habit_tracker.py
 import customtkinter as ctk
 
 
