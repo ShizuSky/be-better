@@ -1,4 +1,3 @@
-# modules/planning.py
 import customtkinter as ctk
 from datetime import date, timedelta
 
@@ -7,16 +6,14 @@ class PlanningFrame(ctk.CTkFrame):
     def __init__(self, master, db, **kwargs):
         super().__init__(master, **kwargs)
         self.db = db
-        self.selected_date = date.today()  # Domyślnie ustawiamy na dzisiaj
+        self.selected_date = date.today()
         self.setup_ui()
 
     def setup_ui(self):
-        # Nagłówek z aktualnie wybraną datą
         self.date_label = ctk.CTkLabel(self, text=f"📅 PLAN NA: {self.selected_date}",
                                        font=("Arial", 20, "bold"))
         self.date_label.pack(pady=10)
 
-        # Nawigacja datami
         nav_frame = ctk.CTkFrame(self, fg_color="transparent")
         nav_frame.pack(pady=5)
 
@@ -24,7 +21,6 @@ class PlanningFrame(ctk.CTkFrame):
         ctk.CTkButton(nav_frame, text="Dziś", width=60, command=self.set_today).pack(side="left", padx=5)
         ctk.CTkButton(nav_frame, text=">", width=40, command=lambda: self.change_date(1)).pack(side="left", padx=5)
 
-        # Dodawanie zadania
         input_frame = ctk.CTkFrame(self)
         input_frame.pack(pady=10, fill="x", padx=20)
 
@@ -34,7 +30,6 @@ class PlanningFrame(ctk.CTkFrame):
         add_btn = ctk.CTkButton(input_frame, text="Dodaj", command=self.add_task)
         add_btn.pack(side="right", padx=10)
 
-        # Lista zadań
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Zadania")
         self.scroll_frame.pack(pady=10, fill="both", expand=True, padx=20)
 
@@ -56,7 +51,6 @@ class PlanningFrame(ctk.CTkFrame):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
-        # Pobieramy zadania tylko dla wybranego dnia
         tasks = self.db.get_tasks_by_date(str(self.selected_date))
         for t_id, t_title, t_date, t_is_done in tasks:
             row = ctk.CTkFrame(self.scroll_frame)

@@ -1,4 +1,3 @@
-# modules/training.py
 import customtkinter as ctk
 import time
 from datetime import date
@@ -20,7 +19,7 @@ class TrainingFrame(ctk.CTkFrame):
         self.setup_today_tab()
         self.setup_history_tab()
 
-    # --- ZAKŁADKA TRENING ---
+
     def setup_today_tab(self):
         for widget in self.tab_today.winfo_children(): widget.destroy()
 
@@ -47,13 +46,13 @@ class TrainingFrame(ctk.CTkFrame):
         self.active_frame = ctk.CTkFrame(self.container_today, fg_color="transparent")
         self.active_frame.pack(fill="both", expand=True)
 
-        # GÓRNY PASEK
+
         top = ctk.CTkFrame(self.active_frame, fg_color="transparent")
         top.pack(fill="x", padx=10, pady=5)
         ctk.CTkLabel(top, text=f"AKTYWNA SESJA: {self.selected_date}", font=("Arial", 14, "bold")).pack(side="left")
         ctk.CTkButton(top, text="ZAKOŃCZ TRENING", fg_color="#aa3333", command=self.finish_workout).pack(side="right")
 
-        # DODAWANIE NOWEGO ĆWICZENIA DO BAZY (To czego brakowało!)
+
         manage_frame = ctk.CTkFrame(self.active_frame)
         manage_frame.pack(pady=5, padx=20, fill="x")
 
@@ -63,7 +62,7 @@ class TrainingFrame(ctk.CTkFrame):
         ctk.CTkButton(manage_frame, text="DODAJ DO BAZY", width=100, height=30,
                       command=self.add_new_exercise_to_db).pack(side="right", padx=10)
 
-        # FORMULARZ SERII
+
         input_f = ctk.CTkFrame(self.active_frame)
         input_f.pack(pady=10, padx=20, fill="x")
 
@@ -91,7 +90,7 @@ class TrainingFrame(ctk.CTkFrame):
             self.db.conn.commit()
             self.new_ex_entry.delete(0, 'end')
 
-            # Odświeżamy OptionMenu
+
             new_list = self.db.get_exercise_list()
             self.ex_choice.configure(values=new_list)
             self.ex_choice.set(name)
@@ -115,7 +114,7 @@ class TrainingFrame(ctk.CTkFrame):
         self.refresh_history()
         self.tabview.set("HISTORIA")
 
-    # --- ZAKŁADKA HISTORIA ---
+
     def setup_history_tab(self):
         for w in self.tab_history.winfo_children(): w.destroy()
         self.scroll_hist = ctk.CTkScrollableFrame(self.tab_history, fg_color="transparent")
@@ -137,7 +136,7 @@ class TrainingFrame(ctk.CTkFrame):
             ctk.CTkLabel(header, text=f"📅 {w_date}", font=("Arial", 14, "bold")).pack(side="left")
             ctk.CTkLabel(header, text=f"Objętość: {vol or 0}kg", font=("Arial", 11)).pack(side="right")
 
-            # Kontener na szczegóły (domyślnie schowany)
+
             details_f = ctk.CTkFrame(card, fg_color="#1a1a2e")
 
             def toggle(f=details_f, s=sid):
