@@ -8,7 +8,6 @@ class Database:
         self.create_tables()
 
     def create_tables(self):
-        # 1. TABELA NAWYKÓW (Habit Tracker)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS habits (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +17,6 @@ class Database:
             )
         ''')
 
-        # 2. TABELA ZADAŃ (Planowanie dnia)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +26,6 @@ class Database:
             )
         ''')
 
-        # 3. TABELA ATLASU ĆWICZEŃ (Twoja własna lista)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS exercises (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +34,6 @@ class Database:
             )
         ''')
 
-        # 4. TABELA TRENINGÓW (Z kolumną session_id do rozróżniania sesji)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS workouts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,7 +48,6 @@ class Database:
 
         self.conn.commit()
 
-    # === SEKCJA NAWYKÓW ===
     def add_habit(self, name):
         self.cursor.execute("INSERT INTO habits (name, streak) VALUES (?, 0)", (name,))
         self.conn.commit()
@@ -83,7 +78,6 @@ class Database:
             self.conn.commit()
             return True
 
-    # === SEKCJA PLANOWANIA (TASKS) ===
     def add_task(self, title, task_date):
         self.cursor.execute("INSERT INTO tasks (title, task_date) VALUES (?, ?)", (title, task_date))
         self.conn.commit()
@@ -101,21 +95,20 @@ class Database:
         self.cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
         self.conn.commit()
 
-    # === SEKCJA TRENINGU & ATLASU ===
+
     def get_exercise_list(self):
-        """Pobiera listę unikalnych nazw ćwiczeń dodanych przez użytkownika."""
         self.cursor.execute("SELECT name FROM exercises ORDER BY name")
         return [row[0] for row in self.cursor.fetchall()]
 
     def add_workout_entry(self, session_id, ex_name, sets, reps, weight, workout_date):
-        """Dodaje nową serię do konkretnej sesji treningowej."""
+
         self.cursor.execute(
             "INSERT INTO workouts (session_id, exercise_name, sets, reps, weight, workout_date) VALUES (?, ?, ?, ?, ?, ?)",
             (session_id, ex_name, sets, reps, weight, workout_date))
         self.conn.commit()
 
     def get_workout_details(self, session_id):
-        """Pobiera wszystkie ćwiczenia i serie dla konkretnej sesji (używane w historii)."""
+
         self.cursor.execute("SELECT exercise_name, sets, reps, weight FROM workouts WHERE session_id = ?", (session_id,))
         return self.cursor.fetchall()
 
@@ -124,7 +117,6 @@ class Database:
         self.conn.commit()
 
     def get_history_summary(self):
-        """Pobiera listę sesji grupowanych po ID do wyświetlenia w historii."""
         self.cursor.execute("""
             SELECT session_id, workout_date, SUM(sets*reps*weight) 
             FROM workouts 
